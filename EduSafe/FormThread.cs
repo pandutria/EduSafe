@@ -14,7 +14,6 @@ namespace EduSafe
     {
         DataBaseDataContext db = new DataBaseDataContext();
         int thread_Id;
-        string mode;
         public FormThread()
         {
             InitializeComponent();
@@ -91,10 +90,11 @@ namespace EduSafe
                 {
                     btnAktif.Visible = false;
                     btnHapus.Visible = true;
-                } else
+                }
+                else
                 {
-                    btnAktif.Visible=true;
-                    btnHapus.Visible=false;
+                    btnAktif.Visible = true;
+                    btnHapus.Visible = false;
                 }
 
                 showDataComment();
@@ -133,7 +133,7 @@ namespace EduSafe
 
         private void btnAktif_Click(object sender, EventArgs e)
         {
-            if(tbNama.Text == string.Empty)
+            if (tbNama.Text == string.Empty)
             {
                 Support.msw("Click row!!");
                 return;
@@ -154,6 +154,47 @@ namespace EduSafe
                 btnAktif.Visible = btnHapus.Visible = false;
 
             }
+        }
+
+        private void btnExel_Click(object sender, EventArgs e)
+        {
+            if (dgvData.Rows.Count == 0)
+            {
+                Support.msw("Dgv kosong");
+                return;
+            }
+            Microsoft.Office.Interop.Excel.Application xlApp = new Microsoft.Office.Interop.Excel.Application();
+
+            xlApp.Visible = true;
+            Microsoft.Office.Interop.Excel.Workbook xlWorkbook = xlApp.Workbooks.Add();
+            Microsoft.Office.Interop.Excel.Worksheet xlWorksheet = (Microsoft.Office.Interop.Excel.Worksheet)xlWorkbook.Sheets[1];
+
+            int rowIndex = 1;
+            int colIndex = 1;
+
+            foreach (DataGridViewColumn column in dgvData.Columns)
+            {
+                xlWorksheet.Cells[rowIndex, colIndex] = column.HeaderText;
+                colIndex++;
+            }
+
+            rowIndex++;
+
+            foreach (DataGridViewRow row in dgvData.Rows)
+            {
+                colIndex = 1;
+                foreach (DataGridViewCell cell in row.Cells)
+                {
+                    xlWorksheet.Cells[rowIndex, colIndex] = cell.Value?.ToString();
+                    colIndex++;
+                }
+                rowIndex++;
+            }
+
+            xlWorksheet.Columns.AutoFit();
+
+            Support.msi("Berhasil");
+
         }
     }
 }

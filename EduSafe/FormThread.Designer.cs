@@ -890,6 +890,7 @@
             this.btnExel.TextMarginLeft = 0;
             this.btnExel.TextPadding = new System.Windows.Forms.Padding(0);
             this.btnExel.UseDefaultRadiusAndThickness = true;
+            this.btnExel.Click += new System.EventHandler(this.btnExel_Click);
             // 
             // FormThread
             // 
